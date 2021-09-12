@@ -1,0 +1,4 @@
+[submodule "dist/dist"]
+	path = dist/dist
+	url = https://github.com/BohdanShaban/Nutrition-Week-Plans-Site
+	branch = deploy
