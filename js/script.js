@@ -131,6 +131,7 @@ const tabs = () => {
     tabs.forEach(item => {
       item.classList.remove('tabheader__item_active');
     });
+    console.log('hideAllTabs()...');
   }
 
   function showSomeTab(id) {
