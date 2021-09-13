@@ -1,4 +1,4 @@
-////////    MODAL WINDOW  (Practice 3)   ////////
+////////    MODAL WINDOW  ////////
 
 const modal = ( openTrigSel, closeTrigSel, modalSel ) => {
 
@@ -12,6 +12,8 @@ const modal = ( openTrigSel, closeTrigSel, modalSel ) => {
     // 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
     // 7) Close Mod Wind by Clicking Outside of Modal Dialog
     // 8) Close Mod Wind by Clicking Esc Btn 
+    // 9) Open Mod Wind in 5 sec (Don't if it was opened previously)
+    // 10) Open Mod Wind if User Scrolled Page to the End
 
 
     //// 2) Form List of Vars from HTML
@@ -23,16 +25,22 @@ const modal = ( openTrigSel, closeTrigSel, modalSel ) => {
     //// 3) addEvntListner on Open buttns
     trigsOpen.forEach( btn => {
         btn.addEventListener( 'click', () => {
-
-            //// 4) Change Inline Styles on Classes
-            //modalWind.style.display = 'block'; 
-            modalWind.classList.add('show');
-            modalWind.classList.remove('hide');
-
-            //// 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
-            document.body.style.overflow = 'hidden';
+            openModalWind();
         })
     })
+
+    function openModalWind() {
+        //// 4) Change Inline Styles on Classes
+        //modalWind.style.display = 'block'; 
+        modalWind.classList.add('show');
+        modalWind.classList.remove('hide');
+
+        //// 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
+        document.body.style.overflow = 'hidden';
+
+        // Clear Interval if Modal Was Open By User
+        if(modWindowTimerId) { clearInterval(modWindowTimerId); }
+    }
 
     function closeModalWind() {
         modalWind.classList.add('hide');
@@ -52,6 +60,19 @@ const modal = ( openTrigSel, closeTrigSel, modalSel ) => {
     document.addEventListener( 'keydown' , (e) => {
         if (e.code === 'Escape') { closeModalWind(); }
     });
+
+    // 9) Open Mod Wind in 5 sec (Don't if it was opened previously)
+    const modWindowTimerId = setTimeout( openModalWind, 10000 ); // !!! 10 Seconds
+
+    // 10) Open Mod Wind if User Scrolled Page to the End
+    window.addEventListener( 'scroll', showModalWinByScroll );
+
+    function showModalWinByScroll() {
+        if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) { 
+            openModalWind(); 
+            removeEventListener( 'scroll', showModalWinByScroll ); 
+        }
+    }
 }
 
 export default modal;

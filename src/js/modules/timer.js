@@ -6,7 +6,7 @@
 // 3) Function for Timer Upd() :  Work with Timer SetUp()  —> updateClock()
 
 
-const timer = () => {
+const timer = ( daysSel, hoursSel, minsSel, secsSel ) => {
 
     console.log('timer.js Script Connedted...');
 
@@ -39,12 +39,12 @@ const timer = () => {
 
 
     // 2) Function for Timer SetUp() :  get all Elms (days, hours, secs) and Being Set Them  —>  setClock()
-    function setClock() {
+    function setClock() { 
 
-        const day = document.querySelector('#days'),
-                hour = document.querySelector('#hours'),
-                minute = document.querySelector('#minutes'),
-                second = document.querySelector('#seconds');
+        const day = document.querySelector(daysSel),
+                hour = document.querySelector(hoursSel),
+                minute = document.querySelector(minsSel),
+                second = document.querySelector(secsSel);
 
         // 3) Function for Timer Upd() :  Work with Timer SetUp()  —> updClock()
         updClock();

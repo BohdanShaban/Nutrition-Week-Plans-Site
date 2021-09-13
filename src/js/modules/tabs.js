@@ -1,12 +1,12 @@
+////////    TABS  ////////
 
+const tabs = ( tabsParrentSel, tabsSelctrs, tabsContntSelctrs ) => {
 
-const tabs = () => {
+    console.log('tabs.js Script Connedted...');  
 
-    console.log('tabs.js Script Connedted...');
-
-    const tabsParrent = document.querySelector('.tabheader__items'),
-          tabs        = document.querySelectorAll('.tabheader__item'),
-          tabsContent  = document.querySelectorAll('.tabcontent');
+    const tabsParrent = document.querySelector(tabsParrentSel),
+          tabs        = document.querySelectorAll(tabsSelctrs),
+          tabsContent  = document.querySelectorAll(tabsContntSelctrs);
     //console.log(tabItems);
 
 

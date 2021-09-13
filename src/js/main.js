@@ -9,8 +9,8 @@ document.addEventListener( 'DOMContentLoaded' , () => {
     'use strict';
 
     // MODULE FUNCTIONS CALLING
-    tabs();
-    timer();
+    tabs( '.tabheader__items', '.tabheader__item', '.tabcontent' ); 
+    timer( '#days' , '#hours' , '#minutes' , '#seconds' );  
     modal('[data-modal]', '[data-close]', '.modal');
 
 }) // document.addEventListener( 'DOMContentLoaded' END
