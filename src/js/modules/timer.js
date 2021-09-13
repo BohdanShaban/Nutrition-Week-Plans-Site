@@ -1,7 +1,7 @@
 ////////   TIMER   ////////  ( .promotion__timer | .promotion__timer .timer__block | .timer )
 
 
-// 1) Function for Date Difference :  Now Date - DeadLine Date  —> getTimeRemaining()
+// 1) Function for Date Difference :  Now Date - DeadLine Date  —> getTimeRemaining()  //  !!!!!  MOST COMPLEX ONE  !!!!!
 // 2) Function for Timer SetUp() :  get all Elms (days, hours, secs) and Being Set Them  —>  setClock()
 // 3) Function for Timer Upd() :  Work with Timer SetUp()  —> updateClock()
 
@@ -15,9 +15,9 @@ const timer = () => {
     // const now = new Date();
     // console.log(now);
     const checkTimerStop = '2020-12-30T13:27:51.777Z';
-    const deadLineStr = '2021-9-16';
+    const deadLineStr = '2022-2-16';
 
-    function getTimeRemaining(deadLineStr) {
+    function getTimeRemaining(deadLineStr) { //  !!!!!  MOST COMPLEX ONE  !!!!!
 
         const deadLineDate = Date.parse(deadLineStr);
         const nowDate = new Date();
