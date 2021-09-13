@@ -142,7 +142,7 @@ const tabs = () => {
   }
 
   hideAllTabs();
-  showSomeTab(0);
+  showSomeTab(1);
   tabsParrent.addEventListener('click', e => {
     const target = e.target;
 
