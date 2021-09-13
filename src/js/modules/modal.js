@@ -62,7 +62,7 @@ const modal = ( openTrigSel, closeTrigSel, modalSel ) => {
     });
 
     // 9) Open Mod Wind in 5 sec (Don't if it was opened previously)
-    const modWindowTimerId = setTimeout( openModalWind, 10000 ); // !!! 10 Seconds
+    const modWindowTimerId = setTimeout( openModalWind, 20000 ); // !!! 10 Seconds
 
     // 10) Open Mod Wind if User Scrolled Page to the End
     window.addEventListener( 'scroll', showModalWinByScroll );
