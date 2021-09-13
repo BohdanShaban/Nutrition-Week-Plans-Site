@@ -97,6 +97,8 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_tabs_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/tabs.js */ "./src/js/modules/tabs.js");
 /* harmony import */ var _modules_timer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/timer.js */ "./src/js/modules/timer.js");
+/* harmony import */ var _modules_modal_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/modal.js */ "./src/js/modules/modal.js");
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -106,7 +108,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Object(_modules_tabs_js__WEBPACK_IMPORTED_MODULE_0__["default"])();
   Object(_modules_timer_js__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  Object(_modules_modal_js__WEBPACK_IMPORTED_MODULE_2__["default"])('[data-modal]', '[data-close]', '.modal');
 }); // document.addEventListener( 'DOMContentLoaded' END
+
+/***/ }),
+
+/***/ "./src/js/modules/modal.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/modal.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+////////    MODAL WINDOW  (Practice 3)   ////////
+const modal = (openTrigSel, closeTrigSel, modalSel) => {
+  console.log('modal.js Script Connedted...'); // 1) Create Data Atr:  data-modal  &  data-close (Can be through tags/selectors BUT It's Convenient)
+  // 2) Form List of Vars from HTML
+  // 3) addEvntListner on Open buttns
+  // 4) Change Inline Styles on Classes
+  // 5) addEvntListner on Close butt
+  // 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
+  // 7) Close Mod Wind by Clicking Outside of Modal Dialog
+  // 8) Close Mod Wind by Clicking Esc Btn 
+  //// 2) Form List of Vars from HTML
+
+  const trigsOpen = document.querySelectorAll(openTrigSel),
+        trigClose = document.querySelector(closeTrigSel),
+        modalWind = document.querySelector(modalSel); //console.log(trigClose);
+  //// 3) addEvntListner on Open buttns
+
+  trigsOpen.forEach(btn => {
+    btn.addEventListener('click', () => {
+      //// 4) Change Inline Styles on Classes
+      //modalWind.style.display = 'block'; 
+      modalWind.classList.add('show');
+      modalWind.classList.remove('hide'); //// 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
+
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeModalWind() {
+    modalWind.classList.add('hide');
+    modalWind.classList.remove('show');
+    document.body.style.overflow = ''; // Enable Scroll
+  } // 5) addEvntListner on Close butt
+
+
+  trigClose.addEventListener('click', closeModalWind); // 7) Close Mod Wind by Clicking Outside of Modal Dialog
+
+  modalWind.addEventListener('click', e => {
+    if (e.target == modalWind) {
+      closeModalWind();
+    }
+  }); // 8) Close Mod Wind by Clicking Esc Btn  ( keydown , keypress)
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Escape') {
+      closeModalWind();
+    }
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (modal);
 
 /***/ }),
 
@@ -174,7 +240,7 @@ const tabs = () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 ////////   TIMER   ////////  ( .promotion__timer | .promotion__timer .timer__block | .timer )
-// 1) Function for Date Difference :  Now Date - DeadLine Date  —> getTimeRemaining()
+// 1) Function for Date Difference :  Now Date - DeadLine Date  —> getTimeRemaining()  //  !!!!!  MOST COMPLEX ONE  !!!!!
 // 2) Function for Timer SetUp() :  get all Elms (days, hours, secs) and Being Set Them  —>  setClock()
 // 3) Function for Timer Upd() :  Work with Timer SetUp()  —> updateClock()
 const timer = () => {
@@ -183,9 +249,10 @@ const timer = () => {
   // console.log(now);
 
   const checkTimerStop = '2020-12-30T13:27:51.777Z';
-  const deadLineStr = '2021-9-16';
+  const deadLineStr = '2022-2-16';
 
   function getTimeRemaining(deadLineStr) {
+    //  !!!!!  MOST COMPLEX ONE  !!!!!
     const deadLineDate = Date.parse(deadLineStr);
     const nowDate = new Date();
     const mSecs = deadLineDate - nowDate;
