@@ -106,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict'; // MODULE FUNCTIONS CALLING
 
 
-  Object(_modules_tabs_js__WEBPACK_IMPORTED_MODULE_0__["default"])();
-  Object(_modules_timer_js__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  Object(_modules_tabs_js__WEBPACK_IMPORTED_MODULE_0__["default"])('.tabheader__items', '.tabheader__item', '.tabcontent');
+  Object(_modules_timer_js__WEBPACK_IMPORTED_MODULE_1__["default"])('#days', '#hours', '#minutes', '#seconds');
   Object(_modules_modal_js__WEBPACK_IMPORTED_MODULE_2__["default"])('[data-modal]', '[data-close]', '.modal');
 }); // document.addEventListener( 'DOMContentLoaded' END
 
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-////////    MODAL WINDOW  (Practice 3)   ////////
+////////    MODAL WINDOW  ////////
 const modal = (openTrigSel, closeTrigSel, modalSel) => {
   console.log('modal.js Script Connedted...'); // 1) Create Data Atr:  data-modal  &  data-close (Can be through tags/selectors BUT It's Convenient)
   // 2) Form List of Vars from HTML
@@ -132,6 +132,8 @@ const modal = (openTrigSel, closeTrigSel, modalSel) => {
   // 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
   // 7) Close Mod Wind by Clicking Outside of Modal Dialog
   // 8) Close Mod Wind by Clicking Esc Btn 
+  // 9) Open Mod Wind in 5 sec (Don't if it was opened previously)
+  // 10) Open Mod Wind if User Scrolled Page to the End
   //// 2) Form List of Vars from HTML
 
   const trigsOpen = document.querySelectorAll(openTrigSel),
@@ -141,14 +143,22 @@ const modal = (openTrigSel, closeTrigSel, modalSel) => {
 
   trigsOpen.forEach(btn => {
     btn.addEventListener('click', () => {
-      //// 4) Change Inline Styles on Classes
-      //modalWind.style.display = 'block'; 
-      modalWind.classList.add('show');
-      modalWind.classList.remove('hide'); //// 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
-
-      document.body.style.overflow = 'hidden';
+      openModalWind();
     });
   });
+
+  function openModalWind() {
+    //// 4) Change Inline Styles on Classes
+    //modalWind.style.display = 'block'; 
+    modalWind.classList.add('show');
+    modalWind.classList.remove('hide'); //// 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
+
+    document.body.style.overflow = 'hidden'; // Clear Interval if Modal Was Open By User
+
+    if (modWindowTimerId) {
+      clearInterval(modWindowTimerId);
+    }
+  }
 
   function closeModalWind() {
     modalWind.classList.add('hide');
@@ -169,7 +179,19 @@ const modal = (openTrigSel, closeTrigSel, modalSel) => {
     if (e.code === 'Escape') {
       closeModalWind();
     }
-  });
+  }); // 9) Open Mod Wind in 5 sec (Don't if it was opened previously)
+
+  const modWindowTimerId = setTimeout(openModalWind, 10000); // !!! 10 Seconds
+  // 10) Open Mod Wind if User Scrolled Page to the End
+
+  window.addEventListener('scroll', showModalWinByScroll);
+
+  function showModalWinByScroll() {
+    if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+      openModalWind();
+      removeEventListener('scroll', showModalWinByScroll);
+    }
+  }
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modal);
@@ -185,11 +207,12 @@ const modal = (openTrigSel, closeTrigSel, modalSel) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const tabs = () => {
+////////    TABS  ////////
+const tabs = (tabsParrentSel, tabsSelctrs, tabsContntSelctrs) => {
   console.log('tabs.js Script Connedted...');
-  const tabsParrent = document.querySelector('.tabheader__items'),
-        tabs = document.querySelectorAll('.tabheader__item'),
-        tabsContent = document.querySelectorAll('.tabcontent'); //console.log(tabItems);
+  const tabsParrent = document.querySelector(tabsParrentSel),
+        tabs = document.querySelectorAll(tabsSelctrs),
+        tabsContent = document.querySelectorAll(tabsContntSelctrs); //console.log(tabItems);
 
   function hideAllTabs() {
     tabsContent.forEach(tab => {
@@ -243,7 +266,7 @@ __webpack_require__.r(__webpack_exports__);
 // 1) Function for Date Difference :  Now Date - DeadLine Date  —> getTimeRemaining()  //  !!!!!  MOST COMPLEX ONE  !!!!!
 // 2) Function for Timer SetUp() :  get all Elms (days, hours, secs) and Being Set Them  —>  setClock()
 // 3) Function for Timer Upd() :  Work with Timer SetUp()  —> updateClock()
-const timer = () => {
+const timer = (daysSel, hoursSel, minsSel, secsSel) => {
   console.log('timer.js Script Connedted...'); // 1) Function for Date Difference :  Now Date - DeadLine Date  —> getTimeRemaining()
   // const now = new Date();
   // console.log(now);
@@ -271,10 +294,10 @@ const timer = () => {
 
 
   function setClock() {
-    const day = document.querySelector('#days'),
-          hour = document.querySelector('#hours'),
-          minute = document.querySelector('#minutes'),
-          second = document.querySelector('#seconds'); // 3) Function for Timer Upd() :  Work with Timer SetUp()  —> updClock()
+    const day = document.querySelector(daysSel),
+          hour = document.querySelector(hoursSel),
+          minute = document.querySelector(minsSel),
+          second = document.querySelector(secsSel); // 3) Function for Timer Upd() :  Work with Timer SetUp()  —> updClock()
 
     updClock();
     const setIntervId = setInterval(updClock, 1000);
