@@ -21,6 +21,7 @@ const tabs = () => {
         tabs.forEach( item => {
             item.classList.remove('tabheader__item_active');
         });
+        console.log('hideAllTabs()...');
     }
 
     function showSomeTab(id) {  
@@ -30,7 +31,7 @@ const tabs = () => {
         tabsContent[id].classList.remove('hide');
     }
     hideAllTabs();
-    showSomeTab(0);
+    showSomeTab(1);
 
         
     tabsParrent.addEventListener( 'click', (e) => {
