@@ -13,8 +13,8 @@
                 <img src="icons/logo.svg" alt="Логотип">
             </div>
             <nav class="header__links">
-                <a href="#" class="header__link">Доставка питания</a>
-                <a href="#" class="header__link">Второй пункт</a>
+                <a href="#" class="header__link"> Доставка питания </a>
+                <a href="#" class="header__link"> Второй пункт </a>
             </nav>
         </div>
         <div class="header__right-block">
@@ -291,19 +291,40 @@
         </div>
     </footer>
 
+    <!-- https://formspree.io/f/xjvjlkpz -->
+
     <div class="modal">
         <div class="modal__dialog">
             <div class="modal__content">
-                <form action="#">
+                <form action="https://formspree.io/f/xjvjlkpz" method="POST">
                     <div data-close class="modal__close">&times;</div>
                     <div class="modal__title">Мы свяжемся с вами как можно быстрее!</div>
                     <input required placeholder="Ваше имя" name="name" type="text" class="modal__input">
                     <input required placeholder="Ваш номер телефона" name="phone" type="phone" class="modal__input">
-                    <button class="btn btn_dark btn_min">Перезвонить мне</button>
+                    <button type="submit" class="btn btn_dark btn_min">Перезвонить мне</button>
                 </form>
             </div>
         </div>
     </div>
+
+    
+
+    <!-- <form class="form" action="https://formspree.io/f/mgeryapz" method="POST">
+
+        <div class="form__group">
+            <label class="form__label" for="input-email">Adress e-mail</label>
+            <input class="form__input" name="input-email" type="text" id="input-email" placeholder="Adress e-mail">
+        </div>
+
+        <div class="form__group">
+            <label class="form__label" for="input-text">Request</label>
+            <textarea class="form__textarea" name="input-text" id="input-text" placeholder="Type your request..."></textarea>
+        </div>
+
+        <div class="text-right">
+            <button class="btn" type="submit">SEND</button>
+        </div>
+    </form> -->
 
     <script src="./js/script.js"></script>
 </body>

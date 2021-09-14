@@ -1,4 +1,5 @@
 ////////    XMLHttpRequest  Server  Comunication  (Practice 1 L53)   ////////
+import { closeModalWind, openModalWind } from '../modules/modal.js'
 
 const formsPostOnServ = () => {
 
@@ -12,12 +13,16 @@ const formsPostOnServ = () => {
     // 6) post(form) :  Reset Form after Data was Send
     // 7) post(form) :  Clear Interval of Div Message Box
 
-    const formsArr = document.querySelectorAll('form');
+    /////  Spinner & Thanks Modal Window
+    // 1) 
+    // 2) 
+    // 3) 
 
+    const formsArr = document.querySelectorAll('form');
     formsArr.forEach( form => postDataXMLHttp(form) );
 
     const messages = {
-        loading : 'Loading...',
+        loading : 'img/form/spinner.svg',
         success : 'Is OK. We Will Contact You !',
         error : 'Error'
     };
@@ -26,11 +31,14 @@ const formsPostOnServ = () => {
         form.addEventListener( 'submit', (e) => {
             e.preventDefault();
 
-            // Message div Creation
-            const infoDiv = document.createElement('div');
-            infoDiv.classList.add('status');
-            infoDiv.textContent = messages.loading;
-            form.append(infoDiv);
+            // Spinner Creation
+            const spinImg = document.createElement('img');
+            spinImg.src = messages.loading;
+            spinImg.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+            form.insertAdjacentElement( 'afterend' , spinImg);
 
             // Request Creation and Configure
             const  req = new XMLHttpRequest();
@@ -53,17 +61,41 @@ const formsPostOnServ = () => {
             req.addEventListener( 'load' , () => {
                 if (req.status === 200) {
                     console.log(req.response);
-                    infoDiv.textContent = messages.success;
 
+                    showThanksModalWind( messages.success );
+                    spinImg.remove();
                     form.reset();
-                    setTimeout( () => { infoDiv.remove() }, 2500 )
-
                 } else {
-                    infoDiv.textContent = messages.error;   
+                    showThanksModalWind( messages.error );   
                 }
             })
 
         } )
+
+        function showThanksModalWind( message ) {
+            const prevModalDialog = document.querySelector('.modal__dialog');
+            openModalWind('.modal');
+            prevModalDialog.classList.add('hide');
+
+            const createdModalDialog = document.createElement('div');
+            createdModalDialog.classList.add('modal__dialog');
+            //createdModalDialog.classList.add('show');
+
+            createdModalDialog.innerHTML = `
+                <div class="modal__content">
+                    <div data-close class="modal__close">×</div>
+                    <div class="modal__title">${message}</div>
+                </div>
+            `;
+            document.querySelector('.modal').append(createdModalDialog);
+
+            setTimeout( () => { 
+                createdModalDialog.remove();
+                prevModalDialog.classList.remove('hide');
+                prevModalDialog.classList.add('show');
+                closeModalWind('.modal');
+            }, 3000 )
+        }
     }
 }
 export default formsPostOnServ;

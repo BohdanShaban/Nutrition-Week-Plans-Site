@@ -99,6 +99,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_timer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/timer.js */ "./src/js/modules/timer.js");
 /* harmony import */ var _modules_modal_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/modal.js */ "./src/js/modules/modal.js");
 /* harmony import */ var _modules_dynMenuCardsCreation_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/dynMenuCardsCreation.js */ "./src/js/modules/dynMenuCardsCreation.js");
+/* harmony import */ var _modules_formsPostOnServ_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/formsPostOnServ.js */ "./src/js/modules/formsPostOnServ.js");
+
 
 
 
@@ -112,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
   Object(_modules_timer_js__WEBPACK_IMPORTED_MODULE_1__["default"])('#days', '#hours', '#minutes', '#seconds');
   Object(_modules_modal_js__WEBPACK_IMPORTED_MODULE_2__["default"])('[data-modal]', '[data-close]', '.modal');
   Object(_modules_dynMenuCardsCreation_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  Object(_modules_formsPostOnServ_js__WEBPACK_IMPORTED_MODULE_4__["default"])();
 }); // document.addEventListener( 'DOMContentLoaded' END
 
 /***/ }),
@@ -200,16 +203,137 @@ const dynMenuCardsCreation = () => {
 
 /***/ }),
 
-/***/ "./src/js/modules/modal.js":
-/*!*********************************!*\
-  !*** ./src/js/modules/modal.js ***!
-  \*********************************/
+/***/ "./src/js/modules/formsPostOnServ.js":
+/*!*******************************************!*\
+  !*** ./src/js/modules/formsPostOnServ.js ***!
+  \*******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_modal_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modules/modal.js */ "./src/js/modules/modal.js");
+////////    XMLHttpRequest  Server  Comunication  (Practice 1 L53)   ////////
+
+
+const formsPostOnServ = () => {
+  console.log("formsPostOnServ.js Connected..."); // 1) Take All Forms
+  // 2) Code post(form) Which will addEvntList to Each Form
+  // 3) Inside post(form) : Create & Configure XMLHttpReq
+  // 4) Ins post(form) : Create obj = FormData()
+  // 5) Ins post(form) EvntList : check if Req is Success or Not & Show Created Message div
+  // 6) post(form) :  Reset Form after Data was Send
+  // 7) post(form) :  Clear Interval of Div Message Box
+  /////  Spinner & Thanks Modal Window
+  // 1) 
+  // 2) 
+  // 3) 
+
+  const formsArr = document.querySelectorAll('form');
+  formsArr.forEach(form => postDataXMLHttp(form));
+  const messages = {
+    loading: 'img/form/spinner.svg',
+    success: 'Is OK. We Will Contact You !',
+    error: 'Error'
+  };
+
+  function postDataXMLHttp(form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault(); // Spinner Creation
+
+      const spinImg = document.createElement('img');
+      spinImg.src = messages.loading;
+      spinImg.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+      form.insertAdjacentElement('afterend', spinImg); // Request Creation and Configure
+
+      const req = new XMLHttpRequest();
+      req.open('POST', 'server.php'); // FormData + XMLHttpReq :  Request DON'T NEED HEADER 
+      // req.setRequestHeader( 'Content-type', 'multipart/form-data' ); !!! DON'T NEED HEADER 
+
+      req.setRequestHeader('Content-type', 'application/json'); // Makeing the POST quer Body  —>  FormData
+
+      const formData = new FormData(form); // Convert FormData  —>  JSON
+
+      const obj = {};
+      formData.forEach(function (key, value) {
+        obj[key] = value;
+      });
+      const jsonObj = JSON.stringify(obj);
+      req.send(jsonObj);
+      req.addEventListener('load', () => {
+        if (req.status === 200) {
+          console.log(req.response);
+          showThanksModalWind(messages.success);
+          spinImg.remove();
+          form.reset();
+        } else {
+          showThanksModalWind(messages.error);
+        }
+      });
+    });
+
+    function showThanksModalWind(message) {
+      const prevModalDialog = document.querySelector('.modal__dialog');
+      Object(_modules_modal_js__WEBPACK_IMPORTED_MODULE_0__["openModalWind"])('.modal');
+      prevModalDialog.classList.add('hide');
+      const createdModalDialog = document.createElement('div');
+      createdModalDialog.classList.add('modal__dialog'); //createdModalDialog.classList.add('show');
+
+      createdModalDialog.innerHTML = `
+                <div class="modal__content">
+                    <div data-close class="modal__close">×</div>
+                    <div class="modal__title">${message}</div>
+                </div>
+            `;
+      document.querySelector('.modal').append(createdModalDialog);
+      setTimeout(() => {
+        createdModalDialog.remove();
+        prevModalDialog.classList.remove('hide');
+        prevModalDialog.classList.add('show');
+        Object(_modules_modal_js__WEBPACK_IMPORTED_MODULE_0__["closeModalWind"])('.modal');
+      }, 3000);
+    }
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (formsPostOnServ);
+
+/***/ }),
+
+/***/ "./src/js/modules/modal.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/modal.js ***!
+  \*********************************/
+/*! exports provided: default, closeModalWind, openModalWind */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "closeModalWind", function() { return closeModalWind; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "openModalWind", function() { return openModalWind; });
 ////////    MODAL WINDOW  ////////
+const closeModalWind = modalSel => {
+  document.querySelector(modalSel).classList.add('hide');
+  document.querySelector(modalSel).classList.remove('show');
+  document.body.style.overflow = ''; // Enable Scroll
+};
+
+const openModalWind = (modalSel, modWindowTimerId = null) => {
+  //// 4) Change Inline Styles on Classes
+  //modalWind.style.display = 'block'; 
+  document.querySelector(modalSel).classList.add('show');
+  document.querySelector(modalSel).classList.remove('hide'); //// 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
+
+  document.body.style.overflow = 'hidden'; // Clear Interval if Modal Was Open By User
+
+  if (modWindowTimerId) {
+    clearInterval(modWindowTimerId);
+  }
+};
+
 const modal = (openTrigSel, closeTrigSel, modalSel) => {
   console.log('modal.js Script Connedted...'); // 1) Create Data Atr:  data-modal  &  data-close (Can be through tags/selectors BUT It's Convenient)
   // 2) Form List of Vars from HTML
@@ -225,63 +349,45 @@ const modal = (openTrigSel, closeTrigSel, modalSel) => {
 
   const trigsOpen = document.querySelectorAll(openTrigSel),
         trigClose = document.querySelector(closeTrigSel),
-        modalWind = document.querySelector(modalSel); //console.log(trigClose);
+        modalWind = document.querySelector(modalSel),
+        // 9) Open Mod Wind in 5 sec (Don't if it was opened previously)
+  modWindowTimerId = setTimeout(() => openModalWind(modalSel), 20000); // !!! 10 Seconds
+  //console.log(trigClose);
   //// 3) addEvntListner on Open buttns
 
   trigsOpen.forEach(btn => {
     btn.addEventListener('click', () => {
-      openModalWind();
+      openModalWind(modalSel, modWindowTimerId);
     });
-  });
+  }); //closeModalWind(modalSel);
+  // 5) addEvntListner on Close butt
 
-  function openModalWind() {
-    //// 4) Change Inline Styles on Classes
-    //modalWind.style.display = 'block'; 
-    modalWind.classList.add('show');
-    modalWind.classList.remove('hide'); //// 6) DisAble Scrolling Posibility (style.overflov = 'hidden')
-
-    document.body.style.overflow = 'hidden'; // Clear Interval if Modal Was Open By User
-
-    if (modWindowTimerId) {
-      clearInterval(modWindowTimerId);
-    }
-  }
-
-  function closeModalWind() {
-    modalWind.classList.add('hide');
-    modalWind.classList.remove('show');
-    document.body.style.overflow = ''; // Enable Scroll
-  } // 5) addEvntListner on Close butt
-
-
-  trigClose.addEventListener('click', closeModalWind); // 7) Close Mod Wind by Clicking Outside of Modal Dialog
+  trigClose.addEventListener('click', () => closeModalWind(modalSel)); // 7) Close Mod Wind by Clicking Outside of Modal Dialog
 
   modalWind.addEventListener('click', e => {
     if (e.target == modalWind) {
-      closeModalWind();
+      closeModalWind(modalSel);
     }
   }); // 8) Close Mod Wind by Clicking Esc Btn  ( keydown , keypress)
 
   document.addEventListener('keydown', e => {
     if (e.code === 'Escape') {
-      closeModalWind();
+      closeModalWind(modalSel);
     }
-  }); // 9) Open Mod Wind in 5 sec (Don't if it was opened previously)
-
-  const modWindowTimerId = setTimeout(openModalWind, 20000); // !!! 10 Seconds
-  // 10) Open Mod Wind if User Scrolled Page to the End
+  }); // 10) Open Mod Wind if User Scrolled Page to the End
 
   window.addEventListener('scroll', showModalWinByScroll);
 
   function showModalWinByScroll() {
     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-      openModalWind();
+      openModalWind(modalSel, modWindowTimerId);
       removeEventListener('scroll', showModalWinByScroll);
     }
   }
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modal);
+
 
 /***/ }),
 
