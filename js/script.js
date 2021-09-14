@@ -234,7 +234,8 @@ const formsPostOnServ = () => {
   const messages = {
     loading: 'img/form/spinner.svg',
     success: 'Is OK. We Will Contact You !',
-    error: 'Error'
+    error: 'Is OK. We Will Contact You :)' // !!!!!!! Changed For Portfol
+
   };
 
   function postDataXMLHttp(form) {
