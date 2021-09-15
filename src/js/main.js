@@ -3,6 +3,8 @@ import timer from './modules/timer.js';
 import modal from './modules/modal.js';
 import dynMenuCardsCreation from './modules/dynMenuCardsCreation.js'
 import formsPostOnServ from './modules/formsPostOnServ.js'
+import slider from './modules/slider.js'
+
 
 
 document.addEventListener( 'DOMContentLoaded' , () => {
@@ -16,5 +18,7 @@ document.addEventListener( 'DOMContentLoaded' , () => {
     modal('[data-modal]', '[data-close]', '.modal');
     dynMenuCardsCreation();
     formsPostOnServ();
+    slider();
+
 
 }) // document.addEventListener( 'DOMContentLoaded' END

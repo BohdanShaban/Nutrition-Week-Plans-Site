@@ -1,4 +1,5 @@
 ////////    XMLHttpRequest  Server  Comunication  (Practice 1 L53)   ////////
+
 import { closeModalWind, openModalWind } from '../modules/modal.js'
 
 const formsPostOnServ = () => {
@@ -15,19 +16,19 @@ const formsPostOnServ = () => {
 
     /////  Spinner & Thanks Modal Window
     // 1) 
-    // 2) 
+    // 2)  
     // 3) 
 
     const formsArr = document.querySelectorAll('form');
-    formsArr.forEach( form => postDataXMLHttp(form) );
+    formsArr.forEach( form => postDataWithFetch(form) );
 
     const messages = {
         loading : 'img/form/spinner.svg',
         success : 'Is OK. We Will Contact You !',
-        error : 'Is OK. We Will Contact You :)' // !!!!!!! Changed For Portfol
+        error : 'Is OK. We Will Contact You :)' // !!!!!!! Changed For Portfolio
     };
 
-    function postDataXMLHttp( form ) {
+    function postDataWithFetch( form ) {
         form.addEventListener( 'submit', (e) => {
             e.preventDefault();
 
@@ -40,14 +41,7 @@ const formsPostOnServ = () => {
             `;
             form.insertAdjacentElement( 'afterend' , spinImg);
 
-            // Request Creation and Configure
-            const  req = new XMLHttpRequest();
-            req.open( 'POST', 'server.php' );
-            // FormData + XMLHttpReq :  Request DON'T NEED HEADER 
-            // req.setRequestHeader( 'Content-type', 'multipart/form-data' ); !!! DON'T NEED HEADER 
-            req.setRequestHeader( 'Content-type', 'application/json' );
-
-            // Makeing the POST quer Body  —>  FormData
+            // FORM_DATA
             const formData = new FormData(form)
 
             // Convert FormData  —>  JSON
@@ -56,19 +50,33 @@ const formsPostOnServ = () => {
                 obj[key] = value;
             }) 
             const jsonObj = JSON.stringify(obj);
-            req.send(jsonObj);
 
-            req.addEventListener( 'load' , () => {
-                if (req.status === 200) {
-                    console.log(req.response);
+            // REQUEST CREATION & CONFIGURE
 
-                    showThanksModalWind( messages.success );
-                    spinImg.remove();
-                    form.reset();
-                } else {
-                    showThanksModalWind( messages.error );   
-                }
+            fetch('server.php', { // Config Obj
+                method: "POST",
+                headers: { 'Content-type' : 'application/json' },
+                body: jsonObj
+                
             })
+            .then( data => {
+                return data.text(); // !!! return
+            } )
+            .then( (data) => {
+                console.log(data    );
+
+                showThanksModalWind( messages.success );
+                spinImg.remove();
+            })
+            .then( () => {
+                form.reset();
+            } )
+            .catch( () => {
+                showThanksModalWind( messages.error ); 
+            })
+            // .finally( () => {
+            //     form.reset();
+            // })
 
         } )
 
@@ -94,7 +102,7 @@ const formsPostOnServ = () => {
                 prevModalDialog.classList.remove('hide');
                 prevModalDialog.classList.add('show');
                 closeModalWind('.modal');
-            }, 3000 )
+            }, 2500 )
         }
     }
 }

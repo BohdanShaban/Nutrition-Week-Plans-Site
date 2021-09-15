@@ -60,7 +60,7 @@ const timer = ( daysSel, hoursSel, minsSel, secsSel ) => {
                 minute.innerHTML = minutes;
                 second.innerHTML = seconds;
 
-                console.log('Changed...');
+                //console.log('Changed...');
 
             }else { console.log('Stoped......'); clearInterval(setIntervId) }
         }
