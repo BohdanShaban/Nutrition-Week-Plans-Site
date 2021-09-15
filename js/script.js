@@ -100,6 +100,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modal_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/modal.js */ "./src/js/modules/modal.js");
 /* harmony import */ var _modules_dynMenuCardsCreation_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/dynMenuCardsCreation.js */ "./src/js/modules/dynMenuCardsCreation.js");
 /* harmony import */ var _modules_formsPostOnServ_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/formsPostOnServ.js */ "./src/js/modules/formsPostOnServ.js");
+/* harmony import */ var _modules_slider_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/slider.js */ "./src/js/modules/slider.js");
+
 
 
 
@@ -115,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
   Object(_modules_modal_js__WEBPACK_IMPORTED_MODULE_2__["default"])('[data-modal]', '[data-close]', '.modal');
   Object(_modules_dynMenuCardsCreation_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
   Object(_modules_formsPostOnServ_js__WEBPACK_IMPORTED_MODULE_4__["default"])();
+  Object(_modules_slider_js__WEBPACK_IMPORTED_MODULE_5__["default"])();
 }); // document.addEventListener( 'DOMContentLoaded' END
 
 /***/ }),
@@ -226,19 +229,19 @@ const formsPostOnServ = () => {
   // 7) post(form) :  Clear Interval of Div Message Box
   /////  Spinner & Thanks Modal Window
   // 1) 
-  // 2) 
+  // 2)  
   // 3) 
 
   const formsArr = document.querySelectorAll('form');
-  formsArr.forEach(form => postDataXMLHttp(form));
+  formsArr.forEach(form => postDataWithFetch(form));
   const messages = {
     loading: 'img/form/spinner.svg',
     success: 'Is OK. We Will Contact You !',
-    error: 'Is OK. We Will Contact You :)' // !!!!!!! Changed For Portfol
+    error: 'Is OK. We Will Contact You :)' // !!!!!!! Changed For Portfolio
 
   };
 
-  function postDataXMLHttp(form) {
+  function postDataWithFetch(form) {
     form.addEventListener('submit', e => {
       e.preventDefault(); // Spinner Creation
 
@@ -248,13 +251,7 @@ const formsPostOnServ = () => {
                 display: block;
                 margin: 0 auto;
             `;
-      form.insertAdjacentElement('afterend', spinImg); // Request Creation and Configure
-
-      const req = new XMLHttpRequest();
-      req.open('POST', 'server.php'); // FormData + XMLHttpReq :  Request DON'T NEED HEADER 
-      // req.setRequestHeader( 'Content-type', 'multipart/form-data' ); !!! DON'T NEED HEADER 
-
-      req.setRequestHeader('Content-type', 'application/json'); // Makeing the POST quer Body  —>  FormData
+      form.insertAdjacentElement('afterend', spinImg); // FORM_DATA
 
       const formData = new FormData(form); // Convert FormData  —>  JSON
 
@@ -262,18 +259,28 @@ const formsPostOnServ = () => {
       formData.forEach(function (key, value) {
         obj[key] = value;
       });
-      const jsonObj = JSON.stringify(obj);
-      req.send(jsonObj);
-      req.addEventListener('load', () => {
-        if (req.status === 200) {
-          console.log(req.response);
-          showThanksModalWind(messages.success);
-          spinImg.remove();
-          form.reset();
-        } else {
-          showThanksModalWind(messages.error);
-        }
-      });
+      const jsonObj = JSON.stringify(obj); // REQUEST CREATION & CONFIGURE
+
+      fetch('server.php', {
+        // Config Obj
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: jsonObj
+      }).then(data => {
+        return data.text(); // !!! return
+      }).then(data => {
+        console.log(data);
+        showThanksModalWind(messages.success);
+        spinImg.remove();
+      }).then(() => {
+        form.reset();
+      }).catch(() => {
+        showThanksModalWind(messages.error);
+      }); // .finally( () => {
+      //     form.reset();
+      // })
     });
 
     function showThanksModalWind(message) {
@@ -295,7 +302,7 @@ const formsPostOnServ = () => {
         prevModalDialog.classList.remove('hide');
         prevModalDialog.classList.add('show');
         Object(_modules_modal_js__WEBPACK_IMPORTED_MODULE_0__["closeModalWind"])('.modal');
-      }, 3000);
+      }, 2500);
     }
   }
 };
@@ -389,6 +396,97 @@ const modal = (openTrigSel, closeTrigSel, modalSel) => {
 
 /* harmony default export */ __webpack_exports__["default"] = (modal);
 
+
+/***/ }),
+
+/***/ "./src/js/modules/slider.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/slider.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+///////////////////////    (Slider)   /////////////////////////////////////////
+const slider = () => {
+  console.log("slider.js Connected..."); // 1) Take All Needed Elms  ( .offer__slider, .offer__slider-counter , .offer__slide)
+  // 2) Idx / Paramether for Current Slide (use & change)
+  // 3) showSlide()  (consists of two) :  showCurrentSlide(Idx)  &  hideAllOtherSlides()
+  // 4) showCurrentSlide(Idx) :  if(END of Slides) {BEGIN from start Again}  && vice versa (in reverse)
+  // 5) divArrows.addEvntList( 'click' , showSlide() )  (if LeftArrow -> Idx--  if RightArrow Idx++)
+  ////// 1) Take All Needed Elms  ( .offer__slider, .offer__slider-counter , .offer__slide)
+
+  const nextSlideBtn = document.querySelector('.offer__slider-next');
+  const prevSlideBtn = document.querySelector('.offer__slider-prev');
+  const slidersArr = document.querySelectorAll('.offer__slide');
+  const currentSlNum = document.querySelector('#current');
+  const totalSlNum = document.querySelector('#total'); //console.log(`slidersArr.length: ${slidersArr.length}`) // -> 4
+  ////// 2) Idx / Paramether for Current Slide (use & change)
+
+  let currSldeIdx = 0;
+  showSlide(currSldeIdx); ////// 5) divArrows.addEvntList( 'click' , showSlide() )  (if LeftArrow -> Idx--  if RightArrow Idx++)
+
+  nextSlideBtn.addEventListener('click', e => {
+    e.preventDefault(); //currSldeIdx ++;
+    //console.log(`Next Pushed  currSldeIdx: ${currSldeIdx}`)
+
+    showSlide(++currSldeIdx);
+  });
+  prevSlideBtn.addEventListener('click', e => {
+    e.preventDefault(); //console.log(`Prev Pushed  currSldeIdx: ${currSldeIdx}`)
+    //currSldeIdx --;
+
+    showSlide(--currSldeIdx);
+  }); // ADD 0 TO TOTAL SLIDES
+  // if( slidesAmount < 10) {
+  //     totalSlNum.textContent = '0' + slidesAmount;
+  // } else {
+  //     totalSlNum.textContent = slidesAmount ;
+  // } 
+  ////// 3) , 4) showSlide()  (consists of two) :  showCurrentSlide(Idx)  &  hideAllOtherSlides()
+
+  function showSlide(slideIdx) {
+    //console.log(`showSlide() slideIdx: ${slideIdx}`)
+    const slidesAmount = slidersArr.length;
+
+    if (slideIdx > slidesAmount) {
+      //console.log('If: slideIdx > slidersArr.length')
+      currSldeIdx = slideIdx = 1;
+    }
+
+    if (slideIdx < 1) {
+      //console.log('If: slideIdx < 1')
+      currSldeIdx = slideIdx = slidesAmount;
+    } // ADD 0 TO CURRENT SLIDES
+
+
+    if (slideIdx < 10) {
+      currentSlNum.textContent = '0' + slideIdx;
+    } else {
+      currentSlNum.textContent = slideIdx;
+    }
+
+    let hideAllOtherSlides = () => {
+      slidersArr.forEach(slide => {
+        slide.classList.remove('show');
+        slide.classList.add('hide');
+      });
+    };
+
+    let showCurrentSlide = idx => {
+      idx--; //console.log(`showSlide() -> showCurrentSlide()  idx: ${idx}`)
+
+      slidersArr[idx].classList.remove('hide');
+      slidersArr[idx].classList.add('show');
+    };
+
+    hideAllOtherSlides();
+    showCurrentSlide(slideIdx);
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (slider);
 
 /***/ }),
 
@@ -509,8 +607,7 @@ const timer = (daysSel, hoursSel, minsSel, secsSel) => {
         day.innerHTML = days;
         hour.innerHTML = hours;
         minute.innerHTML = minutes;
-        second.innerHTML = seconds;
-        console.log('Changed...');
+        second.innerHTML = seconds; //console.log('Changed...');
       } else {
         console.log('Stoped......');
         clearInterval(setIntervId);
