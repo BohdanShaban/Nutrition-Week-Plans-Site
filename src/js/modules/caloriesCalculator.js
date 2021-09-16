@@ -25,7 +25,7 @@ const caloriesCalculator = () => {
     calcPersonCalories();
 
 
-    function takeStaticInfo( parentSelector , activeClass= 'calculating__choose-item_active') {
+    function takeStaticInfo( parentSelector , activeClass = 'calculating__choose-item_active') {
 
         const divButtnsArr = document.querySelectorAll(`${parentSelector} div`);
 
@@ -38,7 +38,7 @@ const caloriesCalculator = () => {
                     gender = e.target.getAttribute('data-gender');
                 }
     
-                console.log(gender, ratio);
+                console.log(`gender: ${gender}, ratio: ${ratio}` );
     
                 divButtnsArr.forEach( item => {
                     item.classList.remove(activeClass)

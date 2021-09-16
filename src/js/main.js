@@ -22,5 +22,6 @@ document.addEventListener( 'DOMContentLoaded' , () => {
     dynMenuCardsCreation();
     formsPostOnServ();
     sliderWheel();
+    caloriesCalculator();
 
 }) // document.addEventListener( 'DOMContentLoaded' END

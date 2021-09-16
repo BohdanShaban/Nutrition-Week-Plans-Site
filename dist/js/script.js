@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
   Object(_modules_dynMenuCardsCreation_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
   Object(_modules_formsPostOnServ_js__WEBPACK_IMPORTED_MODULE_4__["default"])();
   Object(_modules_sliderWheel_js__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  Object(_modules_caloriesCalculator_js__WEBPACK_IMPORTED_MODULE_6__["default"])();
 }); // document.addEventListener( 'DOMContentLoaded' END
 
 /***/ }),
@@ -165,7 +166,7 @@ const caloriesCalculator = () => {
           gender = e.target.getAttribute('data-gender');
         }
 
-        console.log(gender, ratio);
+        console.log(`gender: ${gender}, ratio: ${ratio}`);
         divButtnsArr.forEach(item => {
           item.classList.remove(activeClass);
         });
