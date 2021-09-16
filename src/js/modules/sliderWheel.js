@@ -1,6 +1,6 @@
 // Slider
 
-const slider_wheel = () => {
+const sliderWheel = () => {
 
     let offset = 0;
     let slideIndex = 1;
@@ -78,4 +78,4 @@ const slider_wheel = () => {
     });
 }
  
-export default slider_wheel;
+export default sliderWheel;

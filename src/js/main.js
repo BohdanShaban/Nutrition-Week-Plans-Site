@@ -3,7 +3,9 @@ import timer from './modules/timer.js';
 import modal from './modules/modal.js';
 import dynMenuCardsCreation from './modules/dynMenuCardsCreation.js'
 import formsPostOnServ from './modules/formsPostOnServ.js'
-import slider_wheel from './modules/slider_wheel.js'
+import sliderWheel from './modules/sliderWheel.js'
+import caloriesCalculator from './modules/caloriesCalculator.js'
+
 
 
 
@@ -19,6 +21,6 @@ document.addEventListener( 'DOMContentLoaded' , () => {
     modal('[data-modal]', '[data-close]', '.modal');
     dynMenuCardsCreation();
     formsPostOnServ();
-    slider_wheel();
+    sliderWheel();
 
 }) // document.addEventListener( 'DOMContentLoaded' END

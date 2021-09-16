@@ -100,7 +100,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modal_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/modal.js */ "./src/js/modules/modal.js");
 /* harmony import */ var _modules_dynMenuCardsCreation_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/dynMenuCardsCreation.js */ "./src/js/modules/dynMenuCardsCreation.js");
 /* harmony import */ var _modules_formsPostOnServ_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/formsPostOnServ.js */ "./src/js/modules/formsPostOnServ.js");
-/* harmony import */ var _modules_slider_wheel_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/slider_wheel.js */ "./src/js/modules/slider_wheel.js");
+/* harmony import */ var _modules_sliderWheel_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/sliderWheel.js */ "./src/js/modules/sliderWheel.js");
+/* harmony import */ var _modules_caloriesCalculator_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/caloriesCalculator.js */ "./src/js/modules/caloriesCalculator.js");
+
 
 
 
@@ -117,8 +119,103 @@ document.addEventListener('DOMContentLoaded', () => {
   Object(_modules_modal_js__WEBPACK_IMPORTED_MODULE_2__["default"])('[data-modal]', '[data-close]', '.modal');
   Object(_modules_dynMenuCardsCreation_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
   Object(_modules_formsPostOnServ_js__WEBPACK_IMPORTED_MODULE_4__["default"])();
-  Object(_modules_slider_wheel_js__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  Object(_modules_sliderWheel_js__WEBPACK_IMPORTED_MODULE_5__["default"])();
 }); // document.addEventListener( 'DOMContentLoaded' END
+
+/***/ }),
+
+/***/ "./src/js/modules/caloriesCalculator.js":
+/*!**********************************************!*\
+  !*** ./src/js/modules/caloriesCalculator.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const caloriesCalculator = () => {
+  console.log("caloriesCalculator.js Connected...");
+  const calouriesResult = document.querySelector('.calculating__result span');
+  let gender = 'female',
+      ratio = 1.375;
+  let height, weight, age;
+
+  function calcPersonCalories() {
+    if (!gender || !ratio || !height || !weight || !age) {
+      calouriesResult.textContent = '****';
+      return;
+    }
+
+    if (gender == 'female') {
+      calouriesResult.textContent = Math.round((447.6 + 9.2 * weight + 3.1 * height - 4.3 * age) * ratio);
+    } else {
+      calouriesResult.textContent = Math.round((88.36 + 13.4 * weight + 4.8 * height - 5.7 * age) * ratio);
+    }
+  }
+
+  calcPersonCalories();
+
+  function takeStaticInfo(parentSelector, activeClass = 'calculating__choose-item_active') {
+    const divButtnsArr = document.querySelectorAll(`${parentSelector} div`);
+    divButtnsArr.forEach(divButt => {
+      divButt.addEventListener('click', e => {
+        if (e.target.getAttribute('data-ratio')) {
+          ratio = +e.target.getAttribute('data-ratio');
+        } else {
+          gender = e.target.getAttribute('data-gender');
+        }
+
+        console.log(gender, ratio);
+        divButtnsArr.forEach(item => {
+          item.classList.remove(activeClass);
+        });
+        e.target.classList.add(activeClass);
+        calcPersonCalories();
+      });
+    });
+  }
+
+  takeStaticInfo('#gender');
+  takeStaticInfo('.calculating__choose_big');
+
+  function takeDynamicInfo(parentSelector) {
+    const inputsParent = document.querySelector(parentSelector);
+    inputsParent.addEventListener('input', e => {
+      const regEx = /\D/g;
+
+      if (regEx.test(e.target.value)) {
+        e.target.style.border = '3px solid red';
+      } else {
+        e.target.style.border = 'none';
+      }
+
+      const id = e.target.getAttribute('id');
+
+      switch (id) {
+        case "height":
+          height = +e.target.value;
+          console.log(`heigth: ${height}`);
+          break;
+
+        case "weight":
+          weight = +e.target.value;
+          console.log(`weight: ${weight}`);
+          break;
+
+        case "age":
+          age = +e.target.value;
+          console.log(`age: ${age}`);
+          break;
+      }
+
+      calcPersonCalories();
+    });
+  }
+
+  takeDynamicInfo('.calculating__choose_medium');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (caloriesCalculator);
 
 /***/ }),
 
@@ -399,17 +496,17 @@ const modal = (openTrigSel, closeTrigSel, modalSel) => {
 
 /***/ }),
 
-/***/ "./src/js/modules/slider_wheel.js":
-/*!****************************************!*\
-  !*** ./src/js/modules/slider_wheel.js ***!
-  \****************************************/
+/***/ "./src/js/modules/sliderWheel.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/sliderWheel.js ***!
+  \***************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 // Slider
-const slider_wheel = () => {
+const sliderWheel = () => {
   let offset = 0;
   let slideIndex = 1;
   const slides = document.querySelectorAll('.offer__slide'),
@@ -481,7 +578,7 @@ const slider_wheel = () => {
   });
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (slider_wheel);
+/* harmony default export */ __webpack_exports__["default"] = (sliderWheel);
 
 /***/ }),
 
